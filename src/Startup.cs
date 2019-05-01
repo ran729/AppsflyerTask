@@ -22,7 +22,7 @@ namespace SimilarTwitWeb
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddDbContext<DatabaseContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("SimilarTwitWeb"))
+                options.UseMySql(Configuration.GetConnectionString("AppsflyerTwitter"))
             );
 
             services.AddTransient<ITweetRepository, TweetsRepository>();

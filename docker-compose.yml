@@ -1,7 +1,15 @@
 version: '3.6'
 services:
   db:
-    image: mysql
+    image: appsflyer-tweeter-db
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
+    ports:
+    - "3306:3306"
+  api:
+    image: appsflyer-tweeter-api
+    ports:
+      - "80:80"
+  # consul:
+  #   image: consul
+  #   ports:
+  #     - "1234:1234"
