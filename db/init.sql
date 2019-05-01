@@ -1,0 +1,10 @@
+﻿DROP TABLE IF EXISTS Tweets;
+
+CREATE TABLE Tweets (
+    Id INT NOT NULL AUTO_INCREMENT,
+    CreatedAt TIMESTAMP NOT NULL,
+    UserName INT NOT NULL,
+    MessageText TEXT NULL,
+    PRIMARY KEY (Id)
+);
+
