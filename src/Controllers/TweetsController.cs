@@ -8,8 +8,6 @@ namespace AppsflyerTwitter.Controllers
     [ApiController]
     public class TweetsController : ControllerBase
     {
-        const int FEED_SIZE = 10;
-
         private ITweetRepository _tweetRepository;
 
         public TweetsController(ITweetRepository tweetRepository)
@@ -24,9 +22,9 @@ namespace AppsflyerTwitter.Controllers
         }
 
         [HttpGet("feed")]
-        public IEnumerable<Tweet> GetFeed()
+        public IEnumerable<Tweet> GetFeed(int feedSize = 10)
         {
-            return _tweetRepository.GetFeed(FEED_SIZE);
+            return _tweetRepository.GetFeed(feedSize);
         }
 
         [HttpPost("tweet")]
