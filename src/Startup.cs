@@ -5,6 +5,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using AppsflyerTwitter.DAL;
+using Consul;
+using System;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace SimilarTwitWeb
 {
@@ -21,8 +25,11 @@ namespace SimilarTwitWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddDbContext<DatabaseContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("AppsflyerTwitter"))
+            services.AddDbContext<DatabaseContext>(async options =>
+                { 
+                    var server = await GetAddressFromConsul();
+                    options.UseMySql($"Server={server};Database=AppsFlyerTweeter;Uid=root;");
+                }
             );
 
             services.AddTransient<ITweetRepository, TweetsRepository>();
@@ -33,5 +40,15 @@ namespace SimilarTwitWeb
         {
             app.UseMvc();
         }
+
+        private async Task<string> GetAddressFromConsul()
+        {
+            var address = Configuration.GetValue<string>("Consul");
+            var consulClient = new ConsulClient(o => { o.Address = new Uri(address); });
+            var services = await consulClient.Agent.Services();
+            var agent = services.Response.Values.First(o => o.Service == "appsflyer-tweeter-db-3306");
+            return agent.Address;
+        }
+
     }
 }

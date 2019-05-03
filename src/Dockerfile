@@ -2,7 +2,7 @@
 FROM microsoft/dotnet:2.1-sdk
 
 
-COPY . ./
+COPY . ./src
 WORKDIR src
 RUN dotnet restore
 

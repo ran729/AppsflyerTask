@@ -4,12 +4,27 @@ services:
     image: appsflyer-tweeter-db
     restart: always
     ports:
-    - "3306:3306"
+      - "3306:3306"
+    depends_on:
+      - registrator
   api:
     image: appsflyer-tweeter-api
+    depends_on:
+      - db
+      - registrator
     ports:
       - "80:80"
-  # consul:
-  #   image: consul
-  #   ports:
-  #     - "1234:1234"
+  consul:
+    image: consul
+    ports:
+      - "8500:8500"
+  registrator:
+    image: gliderlabs/registrator:latest
+    command: "consul://127.0.0.1:8500"
+    container_name: registrator
+    hostname: 127.0.0.1
+    network_mode: host
+    depends_on: 
+        - consul
+    volumes:
+        - /var/run/docker.sock:/tmp/docker.sock
