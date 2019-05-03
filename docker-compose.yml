@@ -3,12 +3,18 @@ services:
   db:
     image: appsflyer-tweeter-db
     restart: always
+    build:
+      context: ./db
+      dockerfile: ./Dockerfile
     ports:
       - "3306:3306"
     depends_on:
       - registrator
   api:
     image: appsflyer-tweeter-api
+    build:
+      context: ./src
+      dockerfile: ./Dockerfile
     depends_on:
       - db
       - registrator

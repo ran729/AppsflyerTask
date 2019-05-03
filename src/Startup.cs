@@ -9,6 +9,7 @@ using Consul;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace SimilarTwitWeb
 {
@@ -17,6 +18,7 @@ namespace SimilarTwitWeb
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
         }
 
         public IConfiguration Configuration { get; }
@@ -25,9 +27,12 @@ namespace SimilarTwitWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddDbContext<DatabaseContext>(async options =>
+            var task = GetAddressFromConsul();
+            task.Wait();
+            var server = task.Result;
+
+            services.AddDbContext<DatabaseContext>(options =>
                 { 
-                    var server = await GetAddressFromConsul();
                     options.UseMySql($"Server={server};Database=AppsFlyerTweeter;Uid=root;");
                 }
             );
