@@ -22,9 +22,9 @@ namespace AppsflyerTwitter.Controllers
         }
 
         [HttpGet("feed")]
-        public IEnumerable<Tweet> GetFeed(int feedSize = 10)
+        public IEnumerable<Tweet> GetFeed([FromQuery]int size = 10)
         {
-            return _tweetRepository.GetFeed(feedSize);
+            return _tweetRepository.GetFeed(size);
         }
 
         [HttpPost("tweet")]
