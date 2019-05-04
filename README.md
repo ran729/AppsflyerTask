@@ -1,7 +1,7 @@
 # AppsflyerTask
 ## Technology
 
-Api - ASP.Net Core, C# 
+Web API - AspNet Core, C# 
 
 DB - Mysql
 
